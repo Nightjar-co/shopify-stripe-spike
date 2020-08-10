@@ -56,9 +56,10 @@ const ProductForm = ({ product, stripeData, location }) => {
 
   // Checkout Subscription Plan with Stripe Checkout API
   const checkoutSubscriptionPlan = async (event) => {
-    event.preventDefault();
+    event.preventDefault()
     setStripeError(null)
     // const { id } = stripeData
+    if (!stripe) return null
     const items = [{
       plan: stripeData.metadata.priceId,
       quantity: 1,

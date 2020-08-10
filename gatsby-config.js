@@ -13,9 +13,9 @@ const {
 
 module.exports = {
   siteMetadata: {
-    title: `Gatsby Shopify Starter`,
-    description: `Kick off your next, ecommerce experience with this Gatsby starter. This starter ships with credentials to a shopify demo store so you can try it out immediately.`,
-    author: `@alexanderhorl`,
+    title: `shopify-stripe-spike`,
+    description: `Exploring how well Stripe subscriptions (via Checkout API) can be combined with a Shopify store.`,
+    author: `@nightjar`,
   },
   plugins: [
     `gatsby-plugin-react-helmet`,
