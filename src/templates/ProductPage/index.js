@@ -15,28 +15,32 @@ import {
   ProductDescription
 } from './styles'
 
-const ProductPage = ({ data }) => {
-  const product = data.shopifyProduct
+const ProductPage = ({ data, location }) => {
+  const { shopifyProduct, stripeProduct } = data
   return (
     <>
-      <SEO title={product.title} description={product.description} />
+      <SEO title={shopifyProduct.title} description={shopifyProduct.description} />
       <Container>
         <TwoColumnGrid>
           <GridLeft>
-            {product.images.map(image => (
+            {shopifyProduct.images.map(image => (
               <Img
                 fluid={image.localFile.childImageSharp.fluid}
                 key={image.id}
-                alt={product.title}
+                alt={shopifyProduct.title}
               />
             ))}
           </GridLeft>
           <GridRight>
-            <ProductTitle>{product.title}</ProductTitle>
+            <ProductTitle>{shopifyProduct.title}</ProductTitle>
             <ProductDescription
-              dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
+              dangerouslySetInnerHTML={{ __html: shopifyProduct.descriptionHtml }}
             />
-            <ProductForm product={product} />
+            <ProductForm
+              product={shopifyProduct}
+              stripeData={stripeProduct}
+              location={location}
+            />
           </GridRight>
         </TwoColumnGrid>
       </Container>
@@ -91,6 +95,19 @@ export const query = graphql`
           }
         }
       }
+    }
+    stripeProduct(metadata: { handle: { eq: $handle } }) {
+      id
+      metadata {
+        SKU
+        handle
+        priceId: price_id
+      }
+      active
+      name
+      object
+      type
+      description
     }
   }
 `

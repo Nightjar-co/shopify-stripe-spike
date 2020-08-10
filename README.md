@@ -25,4 +25,5 @@ In the project directory, you can run:
 ### `yarn start`
 
 Runs the app in the development mode.<br />
-Open [http://localhost:8000](http://localhost:8000) to view it in the browser.
+Open [http://localhost:8000](http://localhost:8000) to view the project in the browser.
+Open [http://localhost:8000/___graphql](http://localhost:8000/___graphql) to open GraphiQL (an in-browser tool for writing, validating, and testing GraphQL queries.)

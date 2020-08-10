@@ -30,14 +30,9 @@ const Layout = ({ children }) => {
         `}
         render={data => (
           <>
-            <Navigation siteTitle={data.site.siteMetadata.title} />
+            <Navigation siteTitle="King Topaz" />
             <Wrapper>
               {children}
-              <footer>
-                © {new Date().getFullYear()}, Built with
-                {` `}
-                <a href="https://www.gatsbyjs.org">Gatsby</a>
-              </footer>
             </Wrapper>
           </>
         )}

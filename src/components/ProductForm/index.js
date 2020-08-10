@@ -5,7 +5,9 @@ import PropTypes from 'prop-types'
 
 import StoreContext from '~/context/StoreContext'
 
-const ProductForm = ({ product }) => {
+const isClient = typeof window !== 'undefined';
+
+const ProductForm = ({ product, stripeData, location }) => {
   const {
     options,
     variants,
@@ -14,6 +16,8 @@ const ProductForm = ({ product }) => {
   } = product
   const [variant, setVariant] = useState({ ...initialVariant })
   const [quantity, setQuantity] = useState(1)
+  const [stripe, setStripe] = useState(null)
+  const [stripeError, setStripeError] = useState(null)
   const {
     addVariantToCart,
     store: { client, adding },
@@ -42,6 +46,34 @@ const ProductForm = ({ product }) => {
     checkAvailability(product.shopifyId)
   }, [productVariant, checkAvailability, product.shopifyId])
 
+  useEffect(() => {
+    if (!stripe) {
+      // Initialise Stripe client
+      const stripe = window.Stripe(process.env.GATSBY_STRIPE_API_KEY)
+      setStripe(stripe)
+    }
+  }, [stripe])
+
+  // Checkout Subscription Plan with Stripe Checkout API
+  const checkoutSubscriptionPlan = async (event) => {
+    event.preventDefault();
+    setStripeError(null)
+    // const { id } = stripeData
+    const items = [{
+      plan: stripeData.metadata.priceId,
+      quantity: 1,
+    }]
+    const { error } = await stripe.redirectToCheckout({
+      items,
+      successUrl: `${location.href}?success=true`,
+      cancelUrl: `${location.href}`
+    })
+    if (error) {
+      const { message } = error
+      setStripeError(message)
+    }
+  }
+
   const handleQuantityChange = ({ target }) => {
     setQuantity(target.value)
   }
@@ -66,13 +98,13 @@ const ProductForm = ({ product }) => {
     addVariantToCart(productVariant.shopifyId, quantity)
   }
 
-  /* 
-  Using this in conjunction with a select input for variants 
-  can cause a bug where the buy button is disabled, this 
+  /*
+  Using this in conjunction with a select input for variants
+  can cause a bug where the buy button is disabled, this
   happens when only one variant is available and it's not the
-  first one in the dropdown list. I didn't feel like putting 
+  first one in the dropdown list. I didn't feel like putting
   in time to fix this since its an edge case and most people
-  wouldn't want to use dropdown styled selector anyways - 
+  wouldn't want to use dropdown styled selector anyways -
   at least if the have a sense for good design lol.
   */
   const checkDisabled = (name, value) => {
@@ -98,27 +130,6 @@ const ProductForm = ({ product }) => {
   return (
     <>
       <h3>{price}</h3>
-      {options.map(({ id, name, values }, index) => (
-        <React.Fragment key={id}>
-          <label htmlFor={name}>{name} </label>
-          <select
-            name={name}
-            key={id}
-            onChange={event => handleOptionChange(index, event)}
-          >
-            {values.map(value => (
-              <option
-                value={value}
-                key={`${name}-${value}`}
-                disabled={checkDisabled(name, value)}
-              >
-                {value}
-              </option>
-            ))}
-          </select>
-          <br />
-        </React.Fragment>
-      ))}
       <label htmlFor="quantity">Quantity </label>
       <input
         type="number"
@@ -136,6 +147,14 @@ const ProductForm = ({ product }) => {
         onClick={handleAddToCart}
       >
         Add to Cart
+      </button>
+      <button
+        type="button"
+        disabled={!stripe}
+        onClick={event => checkoutSubscriptionPlan(event)}
+        aria-label="Proceed to checkout"
+      >
+        <span>Subscribe</span>
       </button>
       {!available && <p>This Product is out of Stock!</p>}
     </>
