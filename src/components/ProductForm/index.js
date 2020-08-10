@@ -66,6 +66,9 @@ const ProductForm = ({ product, stripeData, location }) => {
     }]
     const { error } = await stripe.redirectToCheckout({
       items,
+      shippingAddressCollection: {
+        allowedCountries: ['AU']
+      },
       successUrl: `${location.href}?success=true`,
       cancelUrl: `${location.href}`
     })
