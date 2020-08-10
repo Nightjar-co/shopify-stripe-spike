@@ -1,9 +1,9 @@
 {
-  "name": "gatsby-shopify-starter",
+  "name": "shopify-stripe-spike",
   "private": false,
   "description": "A simple starter to build a blazing fast Shopify store quickly with Gatsby",
   "version": "0.1.0",
-  "author": "Alexander Hörl <alexander.horl2@live.de>",
+  "author": "Allan Pooley <allan@nightjar.co>",
   "engines": {
     "node": "=> 10.13 < 10.11"
   },
@@ -35,6 +35,7 @@
   "keywords": [
     "gatsby",
     "shopify",
+    "stripe",
     "ecommerce",
     "store",
     "shop"
@@ -43,7 +44,7 @@
   "scripts": {
     "build": "gatsby build",
     "dev": "gatsby develop",
-    "start": "npm run develop",
+    "start": "gatsby develop",
     "format": "prettier --write \"src/**/*.js\"",
     "test": "echo \"Write tests! -> https://gatsby.app/unit-testing\""
   },
@@ -52,9 +53,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gatsbyjs/gatsby-starter-default"
+    "url": "https://github.com/Nightjar-co/shopify-stripe-spike"
   },
   "bugs": {
-    "url": "https://github.com/gatsbyjs/gatsby/issues"
+    "url": "https://github.com/Nightjar-co/shopify-stripe-spike/issues"
   }
 }
